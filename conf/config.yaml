@@ -1,0 +1,21 @@
+server:
+  host: 'localhost'
+  port: 7700
+  debug: true
+
+database:
+  host: 'localhost'
+  user: 'qogita'
+  password: 'qogita1234'
+  db: 'QOGITA'
+
+cors:
+  resources:
+    "/v1/*":
+      origins: "*"
+  methods:
+    - 'GET'
+    - 'POST'
+
+logging:
+  level: 'WARNING'

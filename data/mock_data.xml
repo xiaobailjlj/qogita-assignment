@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<productFeed>
+    <export_timestamp>2023-12-26 15:02:46</export_timestamp>
+    <items>
+        <item>
+            <articleEAN>888066048958</articleEAN>
+            <articleId>105069</articleId>
+            <brand>Tom Ford</brand>
+            <portfolio>PERFUMES</portfolio>
+            <articleName>Tom Ford Soleil Blanc EDP U 50 ml</articleName>
+            <volume>50</volume>
+            <priceWithoutVat>143.01</priceWithoutVat>
+            <currency>EUR</currency>
+            <stockQuantity>2</stockQuantity>
+        </item>
+        <item>
+            <articleEAN>3380810405880</articleEAN>
+            <articleId>125745</articleId>
+            <brand>Clarins</brand>
+            <portfolio>DECORATIVE_COSMETICS</portfolio>
+            <articleName>Clarins Everlasting Concealer 01 Light 12 ml</articleName>
+            <volume>12</volume>
+            <priceWithoutVat>14.53</priceWithoutVat>
+            <currency>EUR</currency>
+            <stockQuantity>1</stockQuantity>
+        </item>
+    </items>
+</productFeed>

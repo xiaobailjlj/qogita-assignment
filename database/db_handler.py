@@ -38,66 +38,62 @@ class DatabaseHandler:
         :return: None
         """
         logging.info(f"Starting insert_offer_batch: {offers_data}")
+        columns = ["uuid", "seller_id", "gtin", "currency", "pack_price", "pack_quantity", "pack_size", "title",
+                   "description", "status"]
+        columns_str = ", ".join(columns)
+        placeholders = ", ".join(["%s"] * len(columns))
+        sql = f"INSERT INTO offers ({columns_str}) VALUES ({placeholders})"
+        values = []
+        for offer_data in offers_data:
+            value = (
+                offer_data['uuid'],
+                offer_data['seller_id'],
+                offer_data['gtin'],
+                offer_data['currency'],
+                offer_data['pack_price'],
+                offer_data['pack_quantity'],
+                offer_data['pack_size'],
+                offer_data['title'],
+                offer_data['description'],
+                offer_data['status']
+            )
+            values.append(value)
+
         with self._get_connection() as connection:
             with connection.cursor() as cursor:
-                columns = ["uuid", "seller_id", "gtin", "currency", "pack_price", "pack_quantity", "pack_size", "title", "description", "status"]
-                columns_str = ", ".join(columns)
-                placeholders = ", ".join(["%s"] * len(columns))
-                sql = f"INSERT INTO offers ({columns_str}) VALUES ({placeholders})"
-
-                values = []
-                for offer_data in offers_data:
-                    value = (
-                        offer_data['uuid'],
-                        offer_data['seller_id'],
-                        offer_data['gtin'],
-                        offer_data['currency'],
-                        offer_data['pack_price'],
-                        offer_data['pack_quantity'],
-                        offer_data['pack_size'],
-                        offer_data['title'],
-                        offer_data['description'],
-                        offer_data['status']
-                    )
-                    values.append(value)
-
                 logging.info(f"Executing insert_offer_batch SQL: {sql} with values: {values}")
                 cursor.executemany(sql, values)
             connection.commit()
         return
 
-    def get_offer_by_id(self, offer_id):
-        sql = "SELECT * FROM offers WHERE id = %s AND is_deleted = FALSE"
+    def get_offer_by_seller_id_and_gtin(self, seller_id, gtin):
+        sql = "SELECT * FROM offers WHERE status = 'AVAILABLE'"
+        params = []
+        if seller_id:
+            sql += " AND seller_id = %s"
+            params.append(seller_id)
+        if gtin:
+            sql += " AND gtin = %s"
+            params.append(gtin)
 
         with self._get_connection() as connection:
             with connection.cursor() as cursor:
-                cursor.execute(sql, (offer_id,))
-                result = cursor.fetchone()
-
+                logging.info(f"Executing get_offer_by_seller_id_and_gtin SQL: {sql} with params: {params}")
+                cursor.execute(sql, params)
+                result = cursor.fetchall()
         return result
 
-    def get_offer_batch(self, offer_id):
-        sql = "SELECT * FROM offers WHERE id = %s AND is_deleted = FALSE"
-
-        with self._get_connection() as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql, (offer_id,))
-                result = cursor.fetchone()
-
-        return result
-
-    def delete_offer(self, offer_id):
+    def delete_offer(self, gtin, seller_id):
         sql = """
         UPDATE offers 
-        SET is_deleted = TRUE 
-        WHERE id = %s AND is_deleted = FALSE
+        SET status = 'INVALID'
+        WHERE gtin = %s AND seller_id = %s AND status = 'AVAILABLE'
         """
-
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         with self._get_connection() as connection:
             with connection.cursor() as cursor:
-                cursor.execute(sql, (now, offer_id))
+                logging.info(f"Executing delete_offer SQL: {sql} with gtin: {gtin}, seller_id: {seller_id}")
+                cursor.execute(sql, (gtin, seller_id))
                 affected_rows = cursor.rowcount
             connection.commit()
 

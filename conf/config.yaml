@@ -11,7 +11,7 @@ database:
 
 cors:
   resources:
-    "/v1/*":
+    "/api/*":
       origins: "*"
   methods:
     - 'GET'

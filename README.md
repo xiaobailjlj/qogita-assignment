@@ -1,11 +1,11 @@
 # Offers Management
 
 ## Description
-A simple Flask API for managing product offers. 
+A simple Flask API for managing product offers, providing: 
 
-- Provide script to load the provided csv and xml files from the disk and store in MySQL
-- Provide a REST API to list all Offers
-- Provide a REST API to delete a specific Offer
+- A script to load the provided csv and xml files from the disk and store in MySQL
+- REST API to list all Offers
+- REST API to delete a specific Offer
 
 ## Quick Start
 
